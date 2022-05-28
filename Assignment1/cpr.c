@@ -149,6 +149,7 @@ void createChildAndRead(int prcNum)
 	strcat(process, " ends  ");
 
 	write(1, process, MSGSIZE);
+	sleep(10);
 	return;
 
  /* Please complete this function according to the
