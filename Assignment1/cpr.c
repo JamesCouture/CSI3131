@@ -12,7 +12,7 @@ Description: This program contains the code for creation
 Explanation of the zombie process
 (point 5 of "To be completed" in the assignment):
 
-	(please complete this part);
+	Something herefdasfsafda
 
 ------------------------------------------------------------- */
 #include <stdio.h>
@@ -20,6 +20,7 @@ Explanation of the zombie process
 #include <string.h> 
 #include <unistd.h>
 #include <stdlib.h>
+//Declare the message size
 #define MSGSIZE 17
 
 /* Prototype */
@@ -71,25 +72,32 @@ void createChildAndRead(int prcNum)
 	//Create buffer
 	char inbuf[MSGSIZE];
 
+	//Check if in base case
 	if (prcNum == 1){
+
+		//Write that process 1 begins and sleep for time asked
 		write(1, "Process 1 begins", MSGSIZE);
-		sleep(0);
-		write(1, "Process 1 ends", MSGSIZE);
-		return;
+		sleep(5);
 	}
 
 	else {
 		//Storing variable for pipe
 		int fd[2];
 
+		//Create pipe
 		int ret = pipe(fd);
+
+		//Check if there is a pipe error
 		if (ret == -1) {
 			/* error */
 			perror("pipe");
 			exit(1);
 		}
 
+		//Create fork
 		int pid = fork();
+
+		//Check to see if child or parent
 		if (pid < 0) {
 			fprintf(stderr, "Fork Failed");
 			exit(-1);
@@ -97,60 +105,51 @@ void createChildAndRead(int prcNum)
 		else if (pid == 0) {
 			//This is child, closing read, setting up standard output to pipe
 
-			//printf("%s", "SOMETHINBGGGGGGGGGGGGGGG\n");
-
-			close(fd[0]);
+			//Point standard output towards the pipe
 			dup2(fd[1], 1);
+			close(fd[1]);
+			close(fd[0]);
 
 			//Get process begin message
 			char process[] = "Process ";
-			char buffer[17];
+			char buffer[12];
 			sprintf(buffer, "%d", prcNum);
 			strcat(process, buffer);
-			strcat(process, " begins");
+			strcat(process, " begins\n");
+			write(1, process, MSGSIZE);
 
-			//printf("%s", process);
-			write(fd[1], process, MSGSIZE);
-			//close(fd[1]);
-
+			//Execute cpr - 1
 			int answer = prcNum - 1;
-
-			char minusone[17];
+			char minusone[12];
 			sprintf(minusone, "%d", answer);
-			//printf("%s", minusone);
 
 			char* args[] = {"./cpr", minusone, NULL };
-
 			execvp("./cpr", args);
-
 
 		}
 		else {
+			//Change standard input from terminal to pipe
 			close(fd[1]);
 			dup2(fd[0], 0);
+			close(fd[0]);
 
-			while (read(fd[0], inbuf, MSGSIZE)) {
-				strcat(inbuf, "\n");
-				write(1, inbuf, 17);
-				//printf("%s", inbuf);
-				//printf("\n");
+			//Write message stored in pipe until there is none
+			while (read(0, inbuf, MSGSIZE)) {
+				write(1, inbuf, MSGSIZE);
 			}
-			
-			//Get process end message
-			char process[] = "Process ";
-			char buffer[20];
-			sprintf(buffer, "%d", prcNum);
-			strcat(process, buffer);
-			strcat(process, " ends");
-
-			//printf("%s", process);
-			printf("%s",process);
-			//write(1, process, 15);
-
 		}
-
-
+		
 	}
+
+	//Get process end message and end process
+	char process[] = "\nProcess ";
+	char buffer[30];
+	sprintf(buffer, "%d", prcNum);
+	strcat(process, buffer);
+	strcat(process, " ends  ");
+
+	write(1, process, MSGSIZE);
+	return;
 
  /* Please complete this function according to the
 Assignment instructions. */
