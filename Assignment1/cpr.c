@@ -4,6 +4,9 @@ File: cpr.c
 Last name: Couture
 Student number: 300076065
 
+Last name: Bahia
+Student number: 300025648
+
 Description: This program contains the code for creation
  of a child process and attach a pipe to it.
 	 The child will send messages through the pipe
