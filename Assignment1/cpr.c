@@ -17,10 +17,11 @@ Explanation of the zombie process
 A zombie process is a process that has terminated but is still shown in the 
 process table. Once a child process is terminated, it first becomes a zombie 
 before it dissapears from the process table. The parent needs the child process to 
-remain in the table so it can check its status during the wait().
+remain in the table so it can check its status.
 This is shown when we execute the ps -u command each time a process terminates, as
 we can still see the remaining terminated process in the table, however it has 
 <defunct> written next to it.
+This allows the parent to get exit status, accounting information and the child pid (wait() is not necessary for this to happen).
 
 	
 
@@ -86,7 +87,7 @@ void createChildAndRead(int prcNum)
 	if (prcNum == 1){
 
 		//Write that process 1 begins and sleep for time asked
-		write(1, "Process 1 begins \n", MSGSIZE);
+		write(1, "Process 1 begins", MSGSIZE);
 		sleep(5);
 	}
 
@@ -165,8 +166,6 @@ void createChildAndRead(int prcNum)
 
 	//show process table on CLI
 	// execvp("ps", args);
-	
-	
 	
 	return;
 
