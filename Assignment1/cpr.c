@@ -4,6 +4,9 @@ File: cpr.c
 Last name: Couture
 Student number: 300076065
 
+Last name: Bahia
+Student number: 300025648
+
 Description: This program contains the code for creation
  of a child process and attach a pipe to it.
 	 The child will send messages through the pipe
@@ -11,8 +14,15 @@ Description: This program contains the code for creation
 
 Explanation of the zombie process
 (point 5 of "To be completed" in the assignment):
+A zombie process is a process that has terminated but is still shown in the 
+process table. Once a child process is terminated, it first becomes a zombie 
+before it dissapears from the process table. The parent needs the child process to 
+remain in the table so it can check its status during the wait().
+This is shown when we execute the ps -u command each time a process terminates, as
+we can still see the remaining terminated process in the table, however it has 
+<defunct> written next to it.
 
-	Something herefdasfsafda
+	
 
 ------------------------------------------------------------- */
 #include <stdio.h>
@@ -76,7 +86,7 @@ void createChildAndRead(int prcNum)
 	if (prcNum == 1){
 
 		//Write that process 1 begins and sleep for time asked
-		write(1, "Process 1 begins", MSGSIZE);
+		write(1, "Process 1 begins \n", MSGSIZE);
 		sleep(5);
 	}
 
@@ -140,15 +150,24 @@ void createChildAndRead(int prcNum)
 		}
 		
 	}
+	//sleep 5 secs so we can observe the ps command
+	// sleep(5);
+	// char* args[] = {"ps", "-u", "sbahia", NULL };
 
+	
 	//Get process end message and end process
 	char process[] = "\nProcess ";
 	char buffer[30];
 	sprintf(buffer, "%d", prcNum);
 	strcat(process, buffer);
-	strcat(process, " ends  ");
-
+	strcat(process, " ends ");
 	write(1, process, MSGSIZE);
+
+	//show process table on CLI
+	// execvp("ps", args);
+	
+	
+	
 	return;
 
  /* Please complete this function according to the
