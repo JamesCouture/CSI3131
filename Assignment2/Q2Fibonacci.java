@@ -1,14 +1,12 @@
 import java.util.LinkedList;
 
-import javax.xml.transform.Templates;
-
 public class Q2Fibonacci implements Runnable {
 
-    LinkedList fibonacciNumbers;
+    LinkedList<Integer> fibonacciNumbers;
     int number;
 
     public Q2Fibonacci(int numberRecieved) {
-        fibonacciNumbers = new LinkedList();
+        fibonacciNumbers = new LinkedList<>();
         number = numberRecieved;
     }
 
