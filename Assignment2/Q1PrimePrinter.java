@@ -1,8 +1,8 @@
-public class PrimePrinter implements Runnable {
+public class Q1PrimePrinter implements Runnable {
 
     int max;
 
-    public PrimePrinter(int maxInt){
+    public Q1PrimePrinter(int maxInt){
 
         max = maxInt;
 
