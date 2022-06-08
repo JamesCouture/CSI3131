@@ -13,7 +13,7 @@ public class Q2Fibonacci implements Runnable {
     @Override
     public void run() {
 
-        if (number == 0) {
+        if (number <= 0) {
             return;
         } else if (number == 1) {
             fibonacciNumbers.add(0);
