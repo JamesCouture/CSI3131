@@ -59,6 +59,7 @@ int main(int ac, char **av)
                 pthread_join(tidStudent[i], NULL);
             }
 
+            //Destroy semaphore when done code
             sem_destroy(&taSleepSemaphore);
         }
         else
@@ -77,6 +78,7 @@ void *ta(void *param)
 
     int check = 0;
 
+    //Initial sleeping TA
     printf("%s", "Ta is going to sleep\n");
     sem_wait(&taSleepSemaphore);
     printf("%s", "Ta is waking up to work with student\n");
@@ -88,6 +90,7 @@ void *ta(void *param)
         if (counter != check)
         {
 
+            //Sleep TA and waking up using semaphore
             if (counter == 0)
             {
                 printf("%s", "Ta is going to sleep\n");
@@ -115,13 +118,14 @@ void *student(void *param)
 
         sleep((rand() % 10)+4);
 
-        //  call TA
+        // Going to TA office
         printf("%s %d %s", "Student #", a, " is going to TA\n");
 
         counter += 1;
 
         while (counter > 4)
         {
+            //No TA so student leaves to program, and checks TA against later
             printf("%s %d %s", "Student #", a, " has no chair and goes back to programming\n");
             counter -= 1;
             sleep((rand() % 10)+2);
@@ -129,16 +133,16 @@ void *student(void *param)
             printf("%s %d %s", "Student #", a, " is going to TA\n");
         }
 
+        //Getting chair or help depending
         if (counter > 1)
         {
             printf("%s %d %s", "Student #", a, " has a chair and is waiting\n");
-        }
-
-        if (counter == 1)
+        }else(counter == 1)
         {
             printf("%s %d %s", "Student #", a, " is waking up TA\n");
         }
 
+        //Making sure that TA is awake and then waiting for a spot to get help
         sem_post(&taSleepSemaphore);
         pthread_mutex_lock(&lock);
 
@@ -147,6 +151,7 @@ void *student(void *param)
         sleep((rand() % 10)+2);
         printf("%s %d %s", "Student #", a, " is done getting helped with TA\n");
 
+        //Done getting help so leaving and letting the next person in queue be able to go
         sem_wait(&taSleepSemaphore);
         counter -= 1;
         pthread_mutex_unlock(&lock);
