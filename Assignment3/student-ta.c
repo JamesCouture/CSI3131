@@ -137,7 +137,7 @@ void *student(void *param)
         if (counter > 1)
         {
             printf("%s %d %s", "Student #", a, " has a chair and is waiting\n");
-        }else(counter == 1)
+        }else if(counter == 1)
         {
             printf("%s %d %s", "Student #", a, " is waking up TA\n");
         }
