@@ -6,8 +6,17 @@
 #include <pthread.h>
 #include <semaphore.h>
 
+/*
+Last name: Couture
+Student number: 300076065
+
+Last name: Bahia
+Student number: 300025648
+*/
+
 /* Prototype */
 pthread_mutex_t lock;
+sem_t taSleepSemaphore;
 void *ta(void *param);      /* the thread */
 void *student(void *param); /* the thread */
 int counter;
@@ -27,16 +36,12 @@ int main(int ac, char **av)
             pthread_attr_t attrTA;      /* set of attributes for the thread */
             pthread_attr_t attrStudent; /* set of attributes for the thread */
 
-            // if (pthread_mutex_init(&lock, NULL) != 0)
-            // {
-            //     printf("\n mutex init failed\n");
-            //     return 1;
-            // }
-
             /* get the default attributes */
             pthread_attr_init(&attrTA);
             /* get the default attributes */
             pthread_attr_init(&attrStudent);
+
+            sem_init(&taSleepSemaphore, 0, 0);
 
             /* create the thread */
             pthread_create(&tidTA, &attrTA, ta, NULL);
@@ -53,6 +58,8 @@ int main(int ac, char **av)
             {
                 pthread_join(tidStudent[i], NULL);
             }
+
+            sem_destroy(&taSleepSemaphore);
         }
         else
             fprintf(stderr, "Cannot translate argument\n");
@@ -70,17 +77,23 @@ void *ta(void *param)
 
     int check = 0;
 
+    printf("%s", "Ta is going to sleep\n");
+    sem_wait(&taSleepSemaphore);
+    printf("%s", "Ta is waking up to work with student\n");
+    sem_post(&taSleepSemaphore);
+
     while (1 == 1)
     {
+        // Checking if it is necessary to check conditions
         if (counter != check)
         {
-            if (counter == 1)
-            {
-                printf("%s", "Ta is working with student\n");
-            }
-            else if (counter == 0)
+
+            if (counter == 0)
             {
                 printf("%s", "Ta is going to sleep\n");
+                sem_wait(&taSleepSemaphore);
+                printf("%s", "Ta is waking up to work with student\n");
+                sem_post(&taSleepSemaphore);
             }
 
             check = counter;
@@ -94,26 +107,51 @@ void *student(void *param)
 {
 
     int a = *(int *)param;
-    // Student starting to work
-    printf("%s %d %s", "Student #", a, " is working\n");
 
-    // int r = rand() % 10;
-    // printf("%s", "in student\n");
-    sleep(1);
-    // printf("%d\n", r);
-    //  call TA
-    printf("%s %d %s", "Student #", a, " is waiting for TA\n");
+    while (1 == 1)
+    {
+        // Student starting to work
+        printf("%s %d %s", "Student #", a, " is programing\n");
 
-    counter += 1;
-    pthread_mutex_lock(&lock);
+        sleep((rand() % 10)+4);
 
-    printf("%s %d %s", "Student #", a, " is working with TA\n");
+        //  call TA
+        printf("%s %d %s", "Student #", a, " is going to TA\n");
 
-    sleep(2);
-    printf("%s %d %s", "Student #", a, " is done working with TA\n");
+        counter += 1;
 
-    counter -= 1;
-    pthread_mutex_unlock(&lock);
+        while (counter > 4)
+        {
+            printf("%s %d %s", "Student #", a, " has no chair and goes back to programming\n");
+            counter -= 1;
+            sleep((rand() % 10)+2);
+            counter += 1;
+            printf("%s %d %s", "Student #", a, " is going to TA\n");
+        }
+
+        if (counter > 1)
+        {
+            printf("%s %d %s", "Student #", a, " has a chair and is waiting\n");
+        }
+
+        if (counter == 1)
+        {
+            printf("%s %d %s", "Student #", a, " is waking up TA\n");
+        }
+
+        sem_post(&taSleepSemaphore);
+        pthread_mutex_lock(&lock);
+
+        printf("%s %d %s", "Student #", a, " is getting help with TA\n");
+
+        sleep((rand() % 10)+2);
+        printf("%s %d %s", "Student #", a, " is done getting helped with TA\n");
+
+        sem_wait(&taSleepSemaphore);
+        counter -= 1;
+        pthread_mutex_unlock(&lock);
+
+    }
 
     pthread_exit(0);
 }
