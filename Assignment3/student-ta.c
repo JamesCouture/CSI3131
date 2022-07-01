@@ -45,7 +45,7 @@ int main(int ac, char **av)
 
             /* create the thread */
             pthread_create(&tidTA, &attrTA, ta, NULL);
-            printf("%s", "ta created\n");
+            // printf("%s", "ta created\n");
             for (int i = 0; i < n; i++)
             {
                 pthread_create(&tidStudent[i], &attrStudent, &student, &i);
