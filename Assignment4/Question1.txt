@@ -1,0 +1,18 @@
+a. Define a page-replacement algorithm using this basic idea. Specifically address
+these problems:
+i. What the initial value of the counters is
+	Initial counter value  = 0
+ii. When counters are increased
+	Counter values increased when a new page is associated with that frame
+iii. When counters are decreased
+	Counter values decreased when a frame is no longer used
+iv. How the page to be replaced is selected
+	Select the page with the smallest counter. Select the page with the smallest counter in fram
+
+b. How many page faults occur for your algorithm for the following reference string,
+for four page frames?
+	There would be 14 faults for that algorithm.
+
+c. What is the minimum number of page faults for an optimal page replacement
+strategy for the reference string in part b with four page frames?
+	There would be 11 faults using an optimal page replacement.
