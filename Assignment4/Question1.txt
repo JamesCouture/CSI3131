@@ -7,7 +7,7 @@ ii. When counters are increased
 iii. When counters are decreased
 	Counter values decreased when a frame is no longer used
 iv. How the page to be replaced is selected
-	Select the page with the smallest counter. Select the page with the smallest counter in fram
+	Select the page with the smallest counter. Select the page with the smallest counter in frame
 
 b. How many page faults occur for your algorithm for the following reference string,
 for four page frames?

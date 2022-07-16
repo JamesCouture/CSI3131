@@ -37,7 +37,8 @@ public class PageReplacement {
                 continue;
             } else if (memory.size() < numframes ) { // if still space in frame then add to frame; no fault
                 memory.add(pageAddress);
-                System.out.println("Try Page address "+pageAddress+ ". Added to frame: "+ memory);
+                System.out.println("Try Page address "+pageAddress+ ". FAULT, added to frame: "+ memory);
+                faultCounter++;
                 continue;
             } else {
                 int removed = memory.poll();
@@ -64,7 +65,8 @@ public class PageReplacement {
                 continue;
             } else if (memory.size() < frames ) { // if still space in frame then add to frame; no fault
                 memory.add(pageAddress);
-                System.out.println("Try Page address "+pageAddress+ ". Added to frame: "+ memory);
+                System.out.println("Try Page address "+pageAddress+ ". FAULT, added to frame: "+ memory);
+                faultCounter++;
             } else {
                 int removed = memory.poll();
                 memory.add(pageAddress); // remove the least recently used

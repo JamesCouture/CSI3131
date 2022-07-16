@@ -5,4 +5,6 @@ gcc consumer.c -pthread -lrt -o consumer
 gcc producer.c -pthread -lrt -o producer
 
 //To run (9 is the number that it will go to)
-./producer 9 & ./consumer
+./producer 6 & ./consumer
+
+**Note: It only works until 6, after that the libraries used do not support the sharing of variables with larger int values and the code stops working properly

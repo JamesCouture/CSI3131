@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch PageReplacement",
+            "request": "launch",
+            "mainClass": "PageReplacement",
+            "projectName": "CSI3131_645729c4"
+        },
+        {
+            "type": "java",
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}"
@@ -16,7 +23,9 @@
             "request": "launch",
             "mainClass": "Q1Client",
             "projectName": "CSI3131_645729c4",
-            "args": [7]
+            "args": [
+                7
+            ]
         },
         {
             "type": "java",
@@ -24,7 +33,9 @@
             "request": "launch",
             "mainClass": "Q2Client",
             "projectName": "CSI3131_645729c4",
-            "args": [7]
+            "args": [
+                7
+            ]
         }
     ]
 }

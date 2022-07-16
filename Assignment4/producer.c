@@ -8,7 +8,7 @@
 #include <semaphore.h>
 #include <unistd.h>
 
-long factorial(int number)
+int factorial(int number)
 {
     int fact = 1;
 
@@ -32,6 +32,8 @@ int main(int ac, char **av)
             const char *sema1 = "fill";
             const char *sema2 = "avail";
             const char *sema3 = "mutex";
+            int memorySize = sizeof(int)*sizeof(int);
+            //int memorySize = 500000000;
             int shm_fd; // shared memory file discriptor
             long *catNumber;
             
@@ -40,9 +42,9 @@ int main(int ac, char **av)
             // create the shared memory segment
             shm_fd = shm_open(name, O_CREAT | O_RDWR, 0666);
             // configure the size of the shared memory segment
-            ftruncate(shm_fd, sizeof(int));
+            ftruncate(shm_fd, memorySize);
             // map the shared memory segment in process address space
-            catNumber = mmap(0, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
+            catNumber = mmap(0, memorySize, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
             /* creat/open semaphores*/
             // cook post semaphore fill after cooking a pizza
             fill = sem_open(sema1, O_CREAT, 0666, 0);
@@ -68,7 +70,7 @@ int main(int ac, char **av)
             sem_unlink(sema2);
             sem_unlink(sema3);
             /* close and unlink shared memory*/
-            munmap(catNumber, sizeof(int));
+            munmap(catNumber, memorySize);
             close(shm_fd);
             shm_unlink(name);
         }
