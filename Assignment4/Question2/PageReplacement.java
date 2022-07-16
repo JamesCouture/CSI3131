@@ -31,7 +31,8 @@ public class PageReplacement {
         Queue<Integer> memory = new LinkedList<Integer>();
         for (int i = 0; i < refString.length ; i++) {
             int pageAddress = refString[i];
-            // System.out.println(refString.get(i));
+            
+            //Determining if there is a free spot, if a page has to be replaced or if page is already in memory
             if (memory.contains(pageAddress)) {
                 System.out.println("Try Page address "+pageAddress+ ". Already in frame: "+ memory);
                 continue;
@@ -57,7 +58,7 @@ public class PageReplacement {
         Queue<Integer> memory = new LinkedList<Integer>();
         for (int i = 0; i < refString.length ; i++) {
             int pageAddress = refString[i];
-            // System.out.println(refString.get(i));
+            //Determining if there is a free spot, if a page has to be replaced or if page is already in memory
             if (memory.contains(pageAddress)) {
                 memory.remove(pageAddress);
                 memory.add(pageAddress); // remove then put at front so it is most recently used

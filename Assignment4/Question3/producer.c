@@ -29,48 +29,49 @@ int main(int ac, char **av)
         if (sscanf(av[1], "%d", &number) == 1)
         {
             const char *name = "shared_memory";
-            const char *sema1 = "fill";
-            const char *sema2 = "avail";
-            const char *sema3 = "mutex";
-            int memorySize = sizeof(int)*sizeof(int);
-            //int memorySize = 500000000;
+            const char *semaphore1 = "fill";
+            const char *semaphore2 = "avail";
+            const char *semaphore3 = "mutex";
+            int memorySize = sizeof(int);
             int shm_fd; // shared memory file discriptor
-            long *catNumber;
+            long *memoryNumber;
             
             sem_t *fill, *avail, *mutex;
-            /* make * shcatNumberelf shared between processes*/
+            /* make * shmemorNumber shared between processes*/
             // create the shared memory segment
             shm_fd = shm_open(name, O_CREAT | O_RDWR, 0666);
             // configure the size of the shared memory segment
             ftruncate(shm_fd, memorySize);
             // map the shared memory segment in process address space
-            catNumber = mmap(0, memorySize, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
+            memoryNumber = mmap(0, memorySize, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
             /* creat/open semaphores*/
-            // cook post semaphore fill after cooking a pizza
-            fill = sem_open(sema1, O_CREAT, 0666, 0);
-            // waiter post semaphore avail after picking up a pizza, at the beginning avail=3
-            avail = sem_open(sema2, O_CREAT, 0666, 1);
-            // mutex for mutual exclusion of catNumber
-            mutex = sem_open(sema3, O_CREAT, 0666, 1);
-            //printf("\nCook: I have started cooking pizza.\n");
+            // semaphore to allow to know if the number has been printed
+            fill = sem_open(semaphore1, O_CREAT, 0666, 0);
+            // Check if a new number was consumed
+            avail = sem_open(semaphore2, O_CREAT, 0666, 1);
+            // mutex for mutual exclusion of memoryNumber
+            mutex = sem_open(semaphore3, O_CREAT, 0666, 1);
+            
             for (int i = 1; i <= number; i ++)
             {
+                //Mutual exclusion and check to make sure the number was posted before adding the next one
                 sem_wait(avail);
                 sem_wait(mutex);
-                *catNumber = (double)factorial(2*i)/(double)((factorial(i+1))*(factorial(i)));
+                //Calculation for Catalan Number
+                *memoryNumber = (double)factorial(2*i)/(double)((factorial(i+1))*(factorial(i)));
                 sem_post(mutex);
                 sem_post(fill);
             }
-            //printf("Cook: Time is up. I cooked 6 pizza. %d are left.\n", *shelf);
+            
             /* close and unlink semaphores*/
             sem_close(fill);
             sem_close(avail);
             sem_close(mutex);
-            sem_unlink(sema1);
-            sem_unlink(sema2);
-            sem_unlink(sema3);
+            sem_unlink(semaphore1);
+            sem_unlink(semaphore2);
+            sem_unlink(semaphore3);
             /* close and unlink shared memory*/
-            munmap(catNumber, memorySize);
+            munmap(memoryNumber, memorySize);
             close(shm_fd);
             shm_unlink(name);
         }
