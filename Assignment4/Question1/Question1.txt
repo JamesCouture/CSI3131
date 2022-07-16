@@ -7,11 +7,11 @@ ii. When counters are increased
 iii. When counters are decreased
 	Counter values decreased when a frame is no longer used
 iv. How the page to be replaced is selected
-	Select the page with the smallest counter. Select the page with the smallest counter in frame
+	Select the page with the smallest counter. Select the page with the smallest counter in frame. You can use FIFO to break ties.
 
 b. How many page faults occur for your algorithm for the following reference string,
 for four page frames?
-	There would be 14 faults for that algorithm.
+	There would be 13 faults for that algorithm.
 
 c. What is the minimum number of page faults for an optimal page replacement
 strategy for the reference string in part b with four page frames?
