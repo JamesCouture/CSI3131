@@ -8,11 +8,11 @@
 #include <semaphore.h>
 #include <unistd.h>
 
-int factorial(int number)
+long factorial(long number)
 {
-    int fact = 1;
+    long fact = 1;
 
-    for (int j = 1; j <= number; j++)
+    for (long j = 1; j <= number; j++)
     {
         fact = fact * j;
     }
@@ -22,17 +22,17 @@ int factorial(int number)
 int main(int ac, char **av)
 {
 
-    int number;
+    long number;
 
     if (ac == 2)
     {
-        if (sscanf(av[1], "%d", &number) == 1)
+        if (sscanf(av[1], "%ld", &number) == 1)
         {
             const char *name = "shared_memory";
             const char *semaphore1 = "fill";
             const char *semaphore2 = "avail";
             const char *semaphore3 = "mutex";
-            int memorySize = sizeof(int);
+            long memorySize = sizeof(long);
             int shm_fd; // shared memory file discriptor
             long *memoryNumber;
             
@@ -58,7 +58,7 @@ int main(int ac, char **av)
                 sem_wait(avail);
                 sem_wait(mutex);
                 //Calculation for Catalan Number
-                *memoryNumber = (double)factorial(2*i)/(double)((factorial(i+1))*(factorial(i)));
+                *memoryNumber = (long)factorial(2*i)/(long)((factorial(i+1))*(factorial(i)));
                 sem_post(mutex);
                 sem_post(fill);
             }

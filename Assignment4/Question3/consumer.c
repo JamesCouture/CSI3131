@@ -14,7 +14,7 @@ int main()
   const char *semaphore1 = "fill";
   const char *semaphore2 = "avail";
   const char *semaphore3 = "mutex";
-  int memorySize = sizeof(int);
+  long memorySize = sizeof(long);
   int shm_fd; // file descriptor of
   long *memoryNumber;
 
